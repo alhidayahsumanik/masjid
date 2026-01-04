@@ -8,6 +8,7 @@
     
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -22,6 +23,106 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+     <!-- Overlay dan Popup Container -->
+    <div class="popup-overlay" id="popupOverlay">
+        <div class="popup-container" id="popupContainer">
+            <button class="popup-close" id="popupCloseBtn">×</button>
+            <img src="assets/img/donasi-ramadan-popup.png" 
+                 alt="Popup Image" class="popup-image" id="popupImage">
+        </div>
+    </div>
+
+    <script>
+        // URL gambar untuk popup - bisa diganti dengan gambar PNG yang diinginkan
+        // Untuk gambar dari alhidayahsumanik.id, bisa menggunakan URL gambar yang sesuai
+        const popupImageUrl = "assets/img/donasi-ramadan-popup.png";
+        // Atau gunakan URL gambar asli jika tersedia:
+        // const popupImageUrl = "https://alhidayahsumanik.id/p/images/popup-image.png";
+        
+        // Cookie untuk mengingat jika pengguna sudah menutup popup
+        const popupCookieName = "alhidayah_popup_closed";
+        const popupCookieExpiryDays = 1; // Popup akan muncul lagi setelah 1 hari
+        
+        $(document).ready(function() {
+            // Cek apakah cookie popup sudah ada (pengguna sudah menutup popup sebelumnya)
+            if (!getCookie(popupCookieName)) {
+                // Tunggu sebentar sebelum menampilkan popup untuk pengalaman pengguna yang lebih baik
+                setTimeout(function() {
+                    showPopup();
+                }, 1000); // Tampilkan popup setelah 1 detik
+            }
+            
+            // Event listener untuk tombol close
+            $("#popupCloseBtn").click(function() {
+                closePopup();
+                // Set cookie untuk mengingat bahwa pengguna sudah menutup popup
+                setCookie(popupCookieName, "true", popupCookieExpiryDays);
+            });
+            
+            // Event listener untuk klik di luar popup (overlay)
+            $("#popupOverlay").click(function(e) {
+                // Tutup popup hanya jika yang diklik adalah overlay (bukan konten popup)
+                if ($(e.target).hasClass("popup-overlay")) {
+                    closePopup();
+                    setCookie(popupCookieName, "true", popupCookieExpiryDays);
+                }
+            });
+            
+            // Event listener untuk tombol ESC
+            $(document).keyup(function(e) {
+                if (e.key === "Escape") {
+                    closePopup();
+                    setCookie(popupCookieName, "true", popupCookieExpiryDays);
+                }
+            });
+            
+            // Fungsi untuk menampilkan popup
+            function showPopup() {
+                $("#popupImage").attr("src", popupImageUrl);
+                $("#popupOverlay").addClass("active");
+                $("#popupContainer").addClass("active");
+            }
+            
+            // Fungsi untuk menutup popup
+            function closePopup() {
+                $("#popupContainer").removeClass("active");
+                $("#popupOverlay").removeClass("active");
+                
+                // Hapus elemen dari DOM setelah animasi selesai
+                setTimeout(function() {
+                    $("#popupOverlay").remove();
+                }, 300);
+            }
+            
+            // Fungsi untuk menyetel cookie
+            function setCookie(name, value, days) {
+                const d = new Date();
+                d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+                const expires = "expires=" + d.toUTCString();
+                document.cookie = name + "=" + value + ";" + expires + ";path=/";
+            }
+            
+            // Fungsi untuk mendapatkan cookie
+            function getCookie(name) {
+                const cookieName = name + "=";
+                const decodedCookie = decodeURIComponent(document.cookie);
+                const cookieArray = decodedCookie.split(';');
+                
+                for (let i = 0; i < cookieArray.length; i++) {
+                    let cookie = cookieArray[i];
+                    while (cookie.charAt(0) === ' ') {
+                        cookie = cookie.substring(1);
+                    }
+                    if (cookie.indexOf(cookieName) === 0) {
+                        return cookie.substring(cookieName.length, cookie.length);
+                    }
+                }
+                return "";
+            }
+        });
+    </script>
+    
     <!-- Loading Spinner -->
     <div id="loading">
         <div class="spinner"></div>
@@ -791,5 +892,6 @@
             }
         });
     </script>
+
 </body>
 </html>
