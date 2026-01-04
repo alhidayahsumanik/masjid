@@ -787,3 +787,104 @@ body.dark-mode .kajian-item {
     color: var(--gold);
     transform: translateX(5px);
 }
+
+        /* Overlay untuk popup */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        
+        /* Popup aktif */
+        .popup-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* Kontainer popup */
+        .popup-container {
+            position: relative;
+            width: 80vmin; /* Menggunakan vmin untuk responsif 1:1 */
+            height: 80vmin;
+            max-width: 400px;
+            max-height: 400px;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+        }
+        
+        /* Popup aktif */
+        .popup-container.active {
+            transform: scale(1);
+        }
+        
+        /* Tombol close */
+        .popup-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 35px;
+            height: 35px;
+            background: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: bold;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+        
+        .popup-close:hover {
+            background: #c0392b;
+            transform: rotate(90deg);
+        }
+        
+        /* Gambar dalam popup */
+        .popup-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        /* Responsif untuk perangkat kecil */
+        @media (max-width: 768px) {
+            .popup-container {
+                width: 90vmin;
+                height: 90vmin;
+                max-width: 350px;
+                max-height: 350px;
+            }
+            
+            .popup-close {
+                width: 30px;
+                height: 30px;
+                font-size: 18px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .popup-container {
+                width: 95vmin;
+                height: 95vmin;
+                max-width: 300px;
+                max-height: 300px;
+            }
+        }
